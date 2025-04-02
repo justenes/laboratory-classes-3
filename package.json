@@ -2,23 +2,19 @@
   "name": "laboratory-classes-2",
   "version": "1.0.0",
   "description": "",
-  "main": "config.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    /* 🔄 Refactoro the Changer 
-    Skrypt "start" wymaga modyfikacji! Zmień go tak, aby korzystał z "nodemon", 
-    a nie bezpośrednio z "node". */
-    "start": "node server.js"
+    "start": "nodemon server.js",
+    "test": "echo \"No test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
   },
   "author": "",
   "license": "ISC",
-    /* 📦 Dependy the Importer 
-    W tej sekcji powinny znaleźć się zależności produkcyjne. 
-    Dodaj tutaj "express" oraz "body-parser". */
-  "dependencies": {},
-    /* 📦 Dependy the Importer 
-    Tutaj dodajemy zależności deweloperskie. 
-    Zainstaluj "nodemon" i umieść go w tej sekcji! */
-  "devDependencies": {}
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
 }
-

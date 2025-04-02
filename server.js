@@ -1,40 +1,39 @@
-/*
-  📦 Dependy the Importer  
-  Zaimportuj wszystkie wymagane moduły: path, express, body-parser, logger oraz routing.  
-*/
-const http = require("http");
-const config = require("./config");
-const { requestRouting } = require("./routing/routing");
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
 
-const requestListener = (request, response) => {
-  requestRouting(request, response);
-};
+const homeRouter = require('./routing/home');
+const logoutRouter = require('./routing/logout');
+const productRouter = require('./routing/product');
+const killRouter = require('./routing/kill');
+const { getInfoLog, getErrorLog } = require('./utils/logger');
+const { STATUS_CODE } = require('./constants/statusCode');
+const { PORT } = require('./config');
 
-const server = http.createServer(requestListener);
+const app = express();
 
-server.listen(config.PORT);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-/*
-  🏗 Structo the Builder  
-  Utwórz instancję aplikacji express i zapisz ją w stałej app.  
-*/
-/*
-  🏗 Structo the Builder  
-  Zarejestruj middleware body-parser do parsowania ciał formularzy. 
-*/
-/*
-  🏗 Structo the Builder  
-  Dodaj middleware logujący informacje o każdym przychodzącym żądaniu.  
-*/
-/*
-  🏗 Structo the Builder  
-  Zarejestruj middleware obsługujące poszczególne ścieżki.  
-*/
-/*
-  🏗 Structo the Builder  
-    Obsłuż stronę 404 – zwróć plik 404.html i zaloguj błąd.   
-*/
-/*
-  🏗 Structo the Builder  
-    Uruchom serwer i nasłuchuj na porcie z config.js.    
-*/
+app.use((req, res, next) => {
+  getInfoLog(req);
+  next();
+});
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'html');
+app.engine('html', require('ejs').renderFile);
+
+app.use('/product', productRouter);
+app.use('/logout', logoutRouter);
+app.use('/kill', killRouter);
+app.use(homeRouter);
+
+app.use((req, res) => {
+  getErrorLog(`Nie znaleziono trasy: ${req.url}`);
+  res.status(STATUS_CODE.NOT_FOUND).sendFile(path.join(__dirname, 'views', '404.html'));
+});
+
+app.listen(PORT, () => {
+  console.log(`✅ Server działa na porcie ${PORT}`);
+});

@@ -1,19 +1,12 @@
-// 🏗 Structo the Builder
-// Do wysłania pliku możesz wykorzystać, response.sendFile(path.join(__dirname, "../views", "home.html"));
+const express = require('express');
+const path = require('path');
+const { getInfoLog } = require('../utils/logger');
 
-const homeRouting = (method, response) => {
-  response.setHeader("Content-Type", "text/html");
-  response.write("<html>");
-  response.write("<head><title>Shop - Home</title></head>");
-  response.write("<body>");
-  response.write("<h1>Home</h1>");
-  response.write(
-    "<nav><a href='/product/add'>Add product</a><br /><a href='/product/new'>Newest product</a><br /><a href='/logout'>Logout</a></nav>"
-  );
-  response.write("</body>");
-  response.write("</html>");
+const router = express.Router();
 
-  return response.end();
-};
+router.get('/', (req, res) => {
+  getInfoLog(req);
+  res.render('home.html');
+});
 
-module.exports = { homeRouting };
+module.exports = router;
